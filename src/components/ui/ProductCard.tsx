@@ -7,7 +7,7 @@ import { useCartStore } from '@/store/cartStore'
 import { Button } from '@/components/ui/Button'
 
 type ProductCardProps = {
-  _id: string
+  id: string
   nombre: string
   slug: string
   precio: number
@@ -15,7 +15,7 @@ type ProductCardProps = {
 }
 
 export function ProductCard({
-  _id,
+  id,
   nombre,
   slug,
   precio,
@@ -37,6 +37,7 @@ export function ProductCard({
             alt={nombre}
             fill
             className="object-cover"
+            sizes="(max-width: 768px) 100vw, 33vw"
           />
         </div>
         <h3 className="text-lg font-semibold line-clamp-1">{nombre}</h3>
@@ -48,7 +49,14 @@ export function ProductCard({
       <Button
         variant="outline"
         onClick={() =>
-          addItem({ _id, nombre, slug, precio, imagen: imagen || '' })
+          addItem({
+            id,
+            nombre,
+            slug,
+            precio,
+            imagen: imagen || '',
+            cantidad: 1,
+          })
         }
       >
         Agregar a cotización

@@ -1,26 +1,44 @@
+
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
-import { getProductosDestacados } from '@/lib/queries'
-import { ProductCard } from '@/components/ui/ProductCard'
+import { useProductos } from '@/queries/productos'
+import {ProductCard} from './ProductCard'
+import { useSearchStore } from '@/store/searchStore'
+import { useFilterStore } from '@/store/filterStore'
 
-export function FeaturedProducts() {
-  const { data: productos, isLoading, isError } = useQuery({
-    queryKey: ['productos', 'destacados'],
-    queryFn: getProductosDestacados,
+export default function FeaturedProducts() {
+  const { data: productos, isLoading, isError } = useProductos()
+  const search = useSearchStore((state) => state.search.toLowerCase().trim())
+  const categoriaSeleccionada = useFilterStore((state) => state.categoria)
+
+  const productosFiltrados = productos?.filter((producto) => {
+    const coincideBusqueda = producto.title.toLowerCase().includes(search)
+    const coincideCategoria =
+      !categoriaSeleccionada || producto.categoria?.slug === categoriaSeleccionada
+    return coincideBusqueda && coincideCategoria
   })
 
-  if (isLoading) return <p className="text-muted">Cargando productos...</p>
-  if (isError || !productos) return <p className="text-destructive">Error al cargar productos.</p>
+  if (isLoading)
+    return <p className="text-muted-foreground">Cargando productos...</p>
+
+  if (isError)
+    return <p className="text-destructive">Error al cargar productos.</p>
+
+  if (!productosFiltrados || productosFiltrados.length === 0)
+    return <p className="text-muted-foreground">No se encontraron productos.</p>
 
   return (
-    <section className="container py-12">
-      <h2 className="text-2xl font-bold mb-6">Productos Destacados</h2>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {productos.map((producto) => (
-          <ProductCard key={producto._id} {...producto} />
-        ))}
-      </div>
+    <section className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      {productosFiltrados.map((producto) => (
+        <ProductCard
+          key={producto._id}
+          id={producto._id}
+          nombre={producto.title}
+          slug={producto.slug}
+          precio={producto.precio}
+          imagen={producto.imagen}
+        />
+      ))}
     </section>
   )
 }

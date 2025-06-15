@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useCartStore } from '@/store/cartStore'
 import { MobileMenu } from './MobileMenu'
-import { ProductSearch } from '@/features/buscador/ProductSearch'
+import ProductSearch from '@/features/buscador/ProductSearch'
 import { ShoppingCart } from 'lucide-react'
 import { motion } from 'framer-motion'
 

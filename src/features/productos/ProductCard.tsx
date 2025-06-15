@@ -14,7 +14,7 @@ type ProductCardProps = {
   imagen?: string
 }
 
-export default function ProductCard({
+export function ProductCard({
   id,
   nombre,
   slug,
@@ -28,26 +28,39 @@ export default function ProductCard({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="border border-border rounded-xl overflow-hidden bg-background shadow-sm"
+      className="rounded-2xl border border-border bg-background shadow-md p-4 flex flex-col justify-between hover:shadow-lg transition-shadow"
     >
       <Link href={`/productos/${slug}`}>
-        <Image
-          src={imagen || '/placeholder.png'}
-          alt={nombre}
-          width={500}
-          height={500}
-          className="aspect-square w-full object-cover"
-        />
+        <div className="relative w-full aspect-square mb-4 overflow-hidden rounded-xl">
+          <Image
+  src={imagen || '/placeholder.webp'}
+  alt={`Imagen del producto: ${nombre}`}
+  fill
+  className="object-cover"
+  sizes="(max-width: 768px) 100vw, 33vw"
+/>
+        </div>
+        <h3 className="text-lg font-semibold line-clamp-1">{nombre}</h3>
+        <p className="text-primary text-base font-medium mb-2">
+          S/ {precio.toFixed(2)}
+        </p>
       </Link>
 
-      <div className="p-4">
-        <h2 className="text-lg font-semibold line-clamp-1">{nombre}</h2>
-        <p className="text-sm text-muted-foreground mb-2">S/ {precio.toFixed(2)}</p>
-
-        <Button onClick={() => addItem({ id, nombre, slug, precio, cantidad: 1 })} size="sm" className="w-full">
-          Añadir al carrito
-        </Button>
-      </div>
+      <Button
+        variant="outline"
+        onClick={() =>
+          addItem({
+            id,
+            nombre,
+            slug,
+            precio,
+            imagen: imagen || '',
+            cantidad: 1,
+          })
+        }
+      >
+        Agregar a cotización
+      </Button>
     </motion.article>
   )
 }

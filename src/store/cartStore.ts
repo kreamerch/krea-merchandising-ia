@@ -1,13 +1,16 @@
-// src/store/cartStore.ts
+// ✅ src/store/cartStore.ts
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-type ProductoCarrito = {
+export type ProductoCarrito = {
   id: string
   nombre: string
   slug: string
   precio: number
   cantidad: number
+  imagen?: string
+  color?: string
+  mensaje?: string
 }
 
 type CartStore = {
@@ -24,13 +27,19 @@ export const useCartStore = create<CartStore>()(
     (set, get) => ({
       items: [],
 
+      // ✅ Nueva lógica con coincidencia por color y mensaje
       addItem: (newItem) => {
-        const existing = get().items.find((item) => item.id === newItem.id)
+        const isSameItem = (item: ProductoCarrito) =>
+          item.id === newItem.id &&
+          item.color === newItem.color &&
+          item.mensaje === newItem.mensaje
+
+        const existing = get().items.find(isSameItem)
 
         if (existing) {
           set({
             items: get().items.map((item) =>
-              item.id === newItem.id
+              isSameItem(item)
                 ? { ...item, cantidad: item.cantidad + newItem.cantidad }
                 : item
             ),
@@ -52,7 +61,10 @@ export const useCartStore = create<CartStore>()(
         get().items.reduce((total, item) => total + item.cantidad, 0),
 
       getTotalPrice: () =>
-        get().items.reduce((total, item) => total + item.precio * item.cantidad, 0),
+        get().items.reduce(
+          (total, item) => total + item.precio * item.cantidad,
+          0
+        ),
     }),
     {
       name: 'krea-cart-storage',

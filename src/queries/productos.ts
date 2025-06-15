@@ -4,8 +4,8 @@ import { sanityClient } from '@/lib/sanity/client'
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 import { Producto } from '@/types/producto'
 
-// GROQ - Todos los productos
-const productosQuery = groq`*[_type == "producto"]{
+// 🔎 GROQ: Todos los productos
+export const productosQuery = groq`*[_type == "producto"]{
   _id,
   title,
   "slug": slug.current,
@@ -18,8 +18,8 @@ const productosQuery = groq`*[_type == "producto"]{
   }
 } | order(_createdAt desc)`
 
-// GROQ - Producto por slug
-const productoBySlugQuery = groq`*[_type == "producto" && slug.current == $slug][0]{
+// 🔎 GROQ: Producto por slug
+export const productoBySlugQuery = groq`*[_type == "producto" && slug.current == $slug][0]{
   _id,
   title,
   "slug": slug.current,
@@ -32,17 +32,17 @@ const productoBySlugQuery = groq`*[_type == "producto" && slug.current == $slug]
   }
 }`
 
-// 🧠 React Query: Todos los productos
+// 🔁 React Query: Obtener todos los productos
 export function useProductos(options?: UseQueryOptions<Producto[]>) {
   return useQuery<Producto[]>({
     queryKey: ['productos'],
     queryFn: async () => sanityClient.fetch(productosQuery),
-    staleTime: 60 * 1000, // 1 minuto
+    staleTime: 60 * 1000,
     ...options,
   })
 }
 
-// 🧠 React Query: Producto individual por slug
+// 🔁 React Query: Obtener producto por slug
 export function useProductoBySlug(slug: string) {
   return useQuery<Producto>({
     queryKey: ['producto', slug],
