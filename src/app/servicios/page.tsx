@@ -1,20 +1,15 @@
-export const metadata = {
-  title: 'Servicios | Krea Merchandising',
-  description: 'Descubre cómo Krea Merchandising puede ayudarte a destacar tu marca con artículos publicitarios únicos.',
-}
+// ✅ app/servicios/page.tsx
+import { metadata, viewport } from './metadata'
+import ServiciosContent from '@/features/servicios/ServiciosContent'
 
-export const viewport = {
-  width: 'device-width',
-  initialScale: 1,
-}
-
+export { metadata, viewport }
 export default function ServiciosPage() {
   return (
-    <main className="max-w-4xl mx-auto px-4 py-10">
-      <h1 className="text-2xl font-bold mb-4">Nuestros Servicios</h1>
-      <p className="text-muted-foreground">
-        Estamos preparando esta sección para mostrarte todos los servicios que ofrecemos en impresión, personalización y producción de regalos publicitarios.
-      </p>
+    <main className="max-w-7xl mx-auto px-4 py-16">
+      <h1 className="text-3xl font-bold text-center mb-8">
+        Nuestros Servicios en Lima, Perú
+      </h1>
+      <ServiciosContent />
     </main>
   )
 }

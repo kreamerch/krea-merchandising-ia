@@ -1,17 +1,22 @@
-// src/components/ui/Input.tsx
+'use client'
+
 import { cn } from '@/lib/utils'
-import { InputHTMLAttributes } from 'react'
+import { InputHTMLAttributes, forwardRef } from 'react'
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {}
+const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(
+  ({ className, ...props }, ref) => {
+    return (
+      <input
+        ref={ref}
+        className={cn(
+          'w-full rounded-xl border border-border bg-white/90 dark:bg-muted/50 px-4 py-2 text-sm text-foreground placeholder:text-muted-foreground outline-none transition-colors duration-200 focus:border-primary focus:ring-2 focus:ring-primary/30 focus:ring-offset-1',
+          className
+        )}
+        {...props}
+      />
+    )
+  }
+)
 
-export default function Input({ className, ...props }: InputProps) {
-  return (
-    <input
-      className={cn(
-        'w-full rounded-xl border border-[--color-border] bg-[--color-background] text-[--color-foreground] px-4 py-2 placeholder-[--color-muted] focus:outline-none focus:ring-2 focus:ring-[--color-primary]',
-        className
-      )}
-      {...props}
-    />
-  )
-}
+Input.displayName = 'Input'
+export default Input

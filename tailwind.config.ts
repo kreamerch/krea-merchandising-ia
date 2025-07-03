@@ -1,3 +1,4 @@
+// tailwind.config.ts
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
@@ -20,7 +21,7 @@ const config: Config = {
         xl: '1rem',
         '2xl': '1.5rem',
       },
-      // No redefinimos colores, se usan desde las variables CSS declaradas en globals.css
+      // Colores se controlan vía variables CSS en globals.css
     },
   },
   plugins: [

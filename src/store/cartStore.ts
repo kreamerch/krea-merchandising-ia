@@ -1,8 +1,8 @@
-// ✅ src/store/cartStore.ts
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 export type ProductoCarrito = {
+  uid: string
   id: string
   nombre: string
   slug: string
@@ -16,9 +16,9 @@ export type ProductoCarrito = {
 type CartStore = {
   items: ProductoCarrito[]
   addItem: (item: ProductoCarrito) => void
-  removeItem: (id: string) => void
+  removeItem: (uid: string) => void
   clearCart: () => void
-  getTotalItems: () => number
+  getTotalItems: () => number // ← ahora cuenta items únicos
   getTotalPrice: () => number
 }
 
@@ -27,19 +27,13 @@ export const useCartStore = create<CartStore>()(
     (set, get) => ({
       items: [],
 
-      // ✅ Nueva lógica con coincidencia por color y mensaje
       addItem: (newItem) => {
-        const isSameItem = (item: ProductoCarrito) =>
-          item.id === newItem.id &&
-          item.color === newItem.color &&
-          item.mensaje === newItem.mensaje
-
-        const existing = get().items.find(isSameItem)
+        const existing = get().items.find((item) => item.uid === newItem.uid)
 
         if (existing) {
           set({
             items: get().items.map((item) =>
-              isSameItem(item)
+              item.uid === newItem.uid
                 ? { ...item, cantidad: item.cantidad + newItem.cantidad }
                 : item
             ),
@@ -49,16 +43,16 @@ export const useCartStore = create<CartStore>()(
         }
       },
 
-      removeItem: (id) => {
+      removeItem: (uid) => {
         set({
-          items: get().items.filter((item) => item.id !== id),
+          items: get().items.filter((item) => item.uid !== uid),
         })
       },
 
       clearCart: () => set({ items: [] }),
 
-      getTotalItems: () =>
-        get().items.reduce((total, item) => total + item.cantidad, 0),
+      // ✅ Ahora cuenta solo la cantidad de ítems únicos
+      getTotalItems: () => get().items.length,
 
       getTotalPrice: () =>
         get().items.reduce(

@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 import { ButtonHTMLAttributes, forwardRef } from 'react'
 
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: 'default' | 'outline' | 'ghost'
+  variant?: 'default' | 'outline' | 'ghost' | 'primary' // ✅ ampliado
   size?: 'sm' | 'md' | 'lg'
 }
 
@@ -12,6 +12,7 @@ const variants = {
   default: 'bg-primary text-white hover:bg-primary/90',
   outline: 'border border-border text-foreground hover:bg-accent',
   ghost: 'hover:bg-accent text-foreground',
+  primary: 'bg-primary text-white hover:bg-primary/90', // ✅ nuevo estilo
 }
 
 const sizes = {
